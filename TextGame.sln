@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextGame", "TextGame\TextGa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OOP", "OOP\OOP.csproj", "{2BAAE7A3-C01B-4229-BDF7-66CDE22CEC5A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Part2_Algorithm", "Part2_Algorithm\Part2_Algorithm.csproj", "{524B6885-D2D3-4BD6-B0CD-5F108E317C97}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{2BAAE7A3-C01B-4229-BDF7-66CDE22CEC5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2BAAE7A3-C01B-4229-BDF7-66CDE22CEC5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2BAAE7A3-C01B-4229-BDF7-66CDE22CEC5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{524B6885-D2D3-4BD6-B0CD-5F108E317C97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{524B6885-D2D3-4BD6-B0CD-5F108E317C97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{524B6885-D2D3-4BD6-B0CD-5F108E317C97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{524B6885-D2D3-4BD6-B0CD-5F108E317C97}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
