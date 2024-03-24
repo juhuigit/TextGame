@@ -5,11 +5,12 @@ class Program
 {
     static void Main(string[] args)
     {
-        Player knight = new Knight();
-        Monster orc = new Orc();
+        Game game = new Game();
 
-        int damage = knight.GetAttack();
-        orc.OnDamaged(damage);
+        while (true)
+        {
+            game.Process();
+        }
     }
 }
 
