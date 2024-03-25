@@ -44,20 +44,60 @@ public class MyList<T>
 public class Board
 {
     // 데이터를 셋 중에 뭐로 이용하는게 좋을까 ?
-    public int[] _data = new int[25]; // 배열
-    public MyList<int> _data2 = new MyList<int>(); // 동적 배열
-    public LinkedList<int> _data3 = new LinkedList<int>(); // 연결 리스트
+    public TileType[,] _tile; // 배열
+    // public MyList<int> _data2 = new MyList<int>(); // 동적 배열
+    // public LinkedList<int> _data3 = new LinkedList<int>(); // 연결 리스트
+    public int _size;
+    const char CIRCLE = '\u25cf';
 
-    public void Initialize()
+
+    public enum TileType
     {
-        _data2.Add(101);
-        _data2.Add(102);
-        _data2.Add(103);
-        _data2.Add(104);
-        _data2.Add(105);
-        
-        int temp = _data2[2];
-        
-        _data2.RemoveAt(2); // 해당 index 삭제
+        Empty,
+        Wall,
+    }
+    public void Initialize(int size)
+    {
+        _tile = new TileType[size, size];
+        _size = size;
+
+        for (int y = 0; y < _size; y++)
+        {
+            for (int x = 0; x < _size; x++)
+            {
+                if (x == 0 || x == _size - 1 || y == 0 || y == size - 1)
+                    _tile[y, x] = TileType.Wall;
+                else
+                    _tile[y, x] = TileType.Empty;
+            }
+        }
+    }
+
+    public void Render()
+    {
+        ConsoleColor prevColor = Console.ForegroundColor;
+        for (int y = 0; y < _size; y++)
+        {
+            for (int x = 0; x < _size; x++)
+            {
+                Console.ForegroundColor = GetTileColor(_tile[y, x]);
+                Console.Write(CIRCLE);
+            }
+            Console.WriteLine();
+        }
+        Console.ForegroundColor = prevColor;
+    }
+
+    ConsoleColor GetTileColor(TileType type)
+    {
+        switch (type)
+        {
+            case TileType.Empty:
+                return ConsoleColor.Gray;
+            case TileType.Wall:
+                return ConsoleColor.DarkCyan;
+            default:
+                return ConsoleColor.Green;
+        }
     }
 }

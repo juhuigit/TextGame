@@ -5,7 +5,7 @@ class Program
     static void Main(string[] args)
     {
         Board board = new Board();
-        board.Initialize();
+        board.Initialize(25);
         
         Console.CursorVisible = false;
 
@@ -32,15 +32,8 @@ class Program
             
             // 렌더링
             Console.SetCursorPosition(0,0);
-            for (int i = 0; i < 25; i++)
-            {
-                for (int j = 0; j < 25; j++)
-                {
-                    Console.ForegroundColor = ConsoleColor.DarkGray;
-                    Console.Write(CIRCLE);
-                }
-                Console.WriteLine();
-            }
+            board.Render();
+            
 
             return;
         }
