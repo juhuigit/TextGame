@@ -44,11 +44,13 @@ public class MyList<T>
 public class Board
 {
     // 데이터를 셋 중에 뭐로 이용하는게 좋을까 ?
-    public TileType[,] _tile; // 배열
+    public TileType[,] Tile { get; private set; } // 배열
     // public MyList<int> _data2 = new MyList<int>(); // 동적 배열
     // public LinkedList<int> _data3 = new LinkedList<int>(); // 연결 리스트
-    public int _size;
-    const char CIRCLE = '\u25cf';
+    public int Size { get; private set; }
+    const char SQUARE = '\u25a0';
+
+    private Player _player;
 
 
     public enum TileType
@@ -56,46 +58,154 @@ public class Board
         Empty,
         Wall,
     }
-    public void Initialize(int size)
+    public void Initialize(int size, Player player)
     {
-        _tile = new TileType[size, size];
-        _size = size;
+        _player = player;
+        
+        if (size % 2 == 0)
+            return;
+        
+        Tile = new TileType[size, size];
+        Size = size;
 
-        for (int y = 0; y < _size; y++)
+        GenerateByBinaryTree();
+        GenerateBySideWinder();
+    }
+    void GenerateByBinaryTree()
+    {
+        // 길을 막아버리는 작업
+        for (int y = 0; y < Size; y++)
         {
-            for (int x = 0; x < _size; x++)
+            for (int x = 0; x < Size; x++)
             {
-                if (x == 0 || x == _size - 1 || y == 0 || y == size - 1)
-                    _tile[y, x] = TileType.Wall;
+                if (x % 2 == 0 || y % 2 == 0)
+                    Tile[y, x] = TileType.Wall;
                 else
-                    _tile[y, x] = TileType.Empty;
+                    Tile[y, x] = TileType.Empty;
+            }
+        }
+        
+        // 랜덤으로 우측 또는 아래로 길을 뚫는 작업
+        // Binary Tree Algorithm
+        Random rand = new Random();
+        for (int y = 0; y < Size; y++)
+        {
+            for (int x = 0; x < Size; x++)
+            {
+                if (x % 2 == 0 || y % 2 == 0)
+                    continue;
+
+                if (y == Size - 2 && x == Size - 2)
+                {
+                    continue;
+                }
+                
+                if (y == Size - 2)
+                {
+                    Tile[y, x + 1] = TileType.Empty;
+                    continue;
+                }
+                
+                if (x == Size - 2)
+                {
+                    Tile[y + 1, x] = TileType.Empty;
+                    continue;
+                }
+
+                if (rand.Next(0, 2) == 0) // 0 ~ 1의 값 
+                {
+                    Tile[y, x + 1] = TileType.Empty;
+                }
+                else
+                {
+                    Tile[y + 1, x] = TileType.Wall;
+                }
+                    
             }
         }
     }
-
+    void GenerateBySideWinder()
+    {
+        // 길을 막아버리는 작업
+        for (int y = 0; y < Size; y++)
+        {
+            for (int x = 0; x < Size; x++)
+            {
+                if (x % 2 == 0 || y % 2 == 0)
+                    Tile[y, x] = TileType.Wall;
+                else
+                    Tile[y, x] = TileType.Empty;
+            }
+        }
+        
+        // 랜덤으로 우측 또는 아래로 길을 뚫는 작업
+        Random rand = new Random();
+        for (int y = 0; y < Size; y++)
+        {
+            int count = 1;
+            for (int x = 0; x < Size; x++)
+            {
+                if (x % 2 == 0 || y % 2 == 0)
+                    continue;
+                
+                if (y == Size - 2 && x == Size - 2)
+                {
+                    continue;
+                }
+                
+                if (y == Size - 2)
+                {
+                    Tile[y, x + 1] = TileType.Empty;
+                    continue;
+                }
+                
+                if (x == Size - 2)
+                {
+                    Tile[y + 1, x] = TileType.Empty;
+                    continue;
+                }
+                if (rand.Next(0, 2) == 0) // 0 ~ 1의 값 
+                {
+                    Tile[y, x + 1] = TileType.Empty;
+                    count++;
+                }
+                else
+                {
+                    int randomIndex = rand.Next(0, count);
+                    Tile[y + 1, x - randomIndex * 2] = TileType.Wall;
+                    count = 1;
+                }
+                    
+            }
+        }
+    }
     public void Render()
     {
         ConsoleColor prevColor = Console.ForegroundColor;
-        for (int y = 0; y < _size; y++)
+        for (int y = 0; y < Size; y++)
         {
-            for (int x = 0; x < _size; x++)
+            for (int x = 0; x < Size; x++)
             {
-                Console.ForegroundColor = GetTileColor(_tile[y, x]);
-                Console.Write(CIRCLE);
+                // 플레이어 좌표를 갖고 와서, 그 좌표와 현재 y, x 가 일치하면 플레이어 전용 색상으로 표시.
+                if (y == _player.PosY && x == _player.PosX)
+                    Console.ForegroundColor = ConsoleColor.Red;
+                else
+                    Console.ForegroundColor = GetTileColor(Tile[y, x]);
+                
+                Console.Write(SQUARE);
             }
             Console.WriteLine();
         }
         Console.ForegroundColor = prevColor;
     }
-
     ConsoleColor GetTileColor(TileType type)
     {
         switch (type)
         {
             case TileType.Empty:
-                return ConsoleColor.Gray;
+                return ConsoleColor.Yellow;
             case TileType.Wall:
-                return ConsoleColor.DarkCyan;
+                return ConsoleColor.DarkBlue;
             default:
                 return ConsoleColor.Green;
         }
